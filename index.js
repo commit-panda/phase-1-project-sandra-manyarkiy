@@ -1,10 +1,10 @@
 const API_KEY = '582e4a592a05d366493424e26c60ffcb'
 
 // fetch weather information from Open Weather API
-async function fetchWeatherInfo(city = "Nairobi", API_KEY) {
+async function fetchWeatherData(city = "Nairobi", API_KEY) {
     try{
         const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
-        const data = res.json();
+        const data = await res.json();
 
 
         const cloud_name = data.weather[0].main
@@ -14,15 +14,31 @@ async function fetchWeatherInfo(city = "Nairobi", API_KEY) {
         const humidity = data.main.humidity
         const wind_speed = data.wind.speed
 
-       return `The weather in ${city} is: 
-       <ul>
-       <li>Clouds: ${cloud_name}</li>
-       <li>Cloud Description: ${cloud_description}</li>
-       <li>Clouds: ${temp}</li>
-       <li>Feels like: ${feels_like}</li>
-       <li>Humidity: ${humidity}</li>
-       <li>Wind Speed: ${wind_speed}</li>
-       <ul>`
+       const container = document.createElement("div")   // Create a container div
+        
+       
+        const ul = document.createElement("ul")  // Create an unordered list
+        
+        // Create list items for each weather detail
+        const items = [
+            `Sky Conditions: ${cloud_name} (${cloud_description})`,
+            `Temperature: ${temp}°C`,
+            `Feels like: ${feels_like}°C`,
+            `Humidity: ${humidity}%`,
+            `Wind Speed: ${wind_speed} m/s`
+        ]
+        
+        // Add each item to the list
+        items.forEach(text => {
+            const li = document.createElement("li")
+            li.textContent = text
+            ul.appendChild(li)
+        })
+
+         // Add the list to the container
+        container.appendChild(ul)
+        
+        return container
     }
     catch(err){
         console.error("ERROR:", err)
@@ -39,6 +55,10 @@ document.getElementById("weather-form").addEventListener("submit", async (e) =>{
     const city = document.getElementById("city").value;
     const weatherText = await fetchWeatherData(city, API_KEY)
 
-     document.getElementById("result").innerText = weatherText; 
+    const resultDiv = document.getElementById("result")
+    // Clear previous content
+    resultDiv.innerHTML = ""
+    // Append the new weather element
+    resultDiv.appendChild(weatherText) 
    
 })
