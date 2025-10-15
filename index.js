@@ -8,9 +8,16 @@ async function fetchWeatherInfo(city, API_KEY) {
 
         console.log(data)
 
+        const cloud_name = data.weather[0].main
+        const cloud_description = data.weather[0].description
+        const temp = data.main.temp
+        const feels_like = data.main.feels_like
+        const humidity = data.main.humidity
+        const wind_speed = data.wind.speed
+
     }
     catch {
-        
+
     }
     
 }
