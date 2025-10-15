@@ -33,4 +33,11 @@ async function fetchWeatherInfo(city = "Nairobi", API_KEY) {
 
 // Form Handling
 
-document.getElementById()
+document.getElementById("weather-form").addEventListener("submit", async (e) =>{
+    e.preventDefault()
+
+    const city = document.getElementById("city").value;
+    const weatherText = await fetchWeatherData(city, API_KEY)
+
+    document.getElementById("result").innerText = weatherText; 
+})
