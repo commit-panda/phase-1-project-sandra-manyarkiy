@@ -14,12 +14,11 @@ async function fetchWeatherData(city = "Nairobi", API_KEY) {
         const humidity = data.main.humidity
         const wind_speed = data.wind.speed
 
-       const container = document.createElement("div")   // Create a container div
+       const container = document.createElement("div") 
         
        
-        const ul = document.createElement("ul")  // Create an unordered list
+        const ul = document.createElement("ul")
         
-        // Create list items for each weather detail
         const items = [
             `Sky Conditions: ${cloud_name} (${cloud_description})`,
             `Temperature: ${temp}°C`,
@@ -28,14 +27,12 @@ async function fetchWeatherData(city = "Nairobi", API_KEY) {
             `Wind Speed: ${wind_speed} m/s`
         ]
         
-        // Add each item to the list
         items.forEach(text => {
             const li = document.createElement("li")
             li.textContent = text
             ul.appendChild(li)
         })
 
-         // Add the list to the container
         container.appendChild(ul)
         
         return container
@@ -48,7 +45,6 @@ async function fetchWeatherData(city = "Nairobi", API_KEY) {
 }
 
 // Form Handling
-
 document.getElementById("weather-form").addEventListener("submit", async (e) =>{
     e.preventDefault()
 
@@ -56,9 +52,7 @@ document.getElementById("weather-form").addEventListener("submit", async (e) =>{
     const weatherText = await fetchWeatherData(city, API_KEY)
 
     const resultDiv = document.getElementById("result")
-    // Clear previous content
     resultDiv.innerHTML = ""
-    // Append the new weather element
     resultDiv.appendChild(weatherText) 
    
 })
