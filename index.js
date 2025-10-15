@@ -39,5 +39,6 @@ document.getElementById("weather-form").addEventListener("submit", async (e) =>{
     const city = document.getElementById("city").value;
     const weatherText = await fetchWeatherData(city, API_KEY)
 
-    document.getElementById("result").innerText = weatherText; 
+     document.getElementById("result").innerText = weatherText; 
+   
 })
