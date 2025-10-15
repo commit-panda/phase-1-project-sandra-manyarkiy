@@ -30,3 +30,7 @@ async function fetchWeatherInfo(city = "Nairobi", API_KEY) {
     }
     
 }
+
+// Form Handling
+
+document.getElementById()
