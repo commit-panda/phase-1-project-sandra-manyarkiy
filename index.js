@@ -3,63 +3,34 @@ import { API_KEY } from "./config.js"
 
 // const FSQ_API_KEY = 
 
-// fetch weather information from Open Weather API
-async function fetchWeatherData(city = "Nairobi", API_KEY) {
+// fetch current weather information from Open Weather API
+async function fetchWeatherData(city, API_KEY) {
     try{
         const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
         const data = await res.json();
 
 
-        const cloud_name = data.weather[0].main
-        const cloud_description = data.weather[0].description
-        const temp = data.main.temp
-        const feels_like = data.main.feels_like
-        const humidity = data.main.humidity
-        const wind_speed = data.wind.speed
+        // const cloud_name = data.weather[0].main
+        // const cloud_description = data.weather[0].description
+        // const temp = data.main.temp
+        // const feels_like = data.main.feels_like
+        // const humidity = data.main.humidity
+        // const wind_speed = data.wind.speed
 
-       const container = document.createElement("div") 
+        document.getElementById('city-name').innerHTML = `${data.name}, ${data.sys.country}<br /><small id="today-date">${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</small>`;
+        document.getElementById('weather-condition').innerHTML = `${data.weather[0].description}`;
+        document.getElementById('current-temp').textContent = `${Math.round(data.main.temp)}°`;
+        document.getElementById('temp-range').textContent = `${Math.round(data.main.temp_min)}° / ${Math.round(data.main.temp_max)}°`;
         
-       
-        const ul = document.createElement("ul")
-        
-        const items = [
-            `Sky Conditions: ${cloud_name} (${cloud_description})`,
-            `Temperature: ${temp}°C`,
-            `Feels like: ${feels_like}°C`,
-            `Humidity: ${humidity}%`,
-            `Wind Speed: ${wind_speed} m/s`
-        ]
-        
-        items.forEach(text => {
-            const li = document.createElement("li")
-            li.textContent = text
-            ul.appendChild(li)
-        })
-
-        container.appendChild(ul)
-        
-        return container
+        return data
     }
     catch(err){
         console.error("ERROR:", err)
-        return "Could not fetch weather information. Please try again." 
+        return "Could not fetch weather information. Please try check city name." 
     }
     
 }
 
-function displayWeatherData(){
-    const todayDate = new Date();
-    const date = document.getElementById("today-date")
-    date.innerHTML = todayDate.toLocaleDateString();
-
-    console.log(todayDate)
-
-
-    const weatherBody = document.getElementById("current-weather-result")
-    // weatherBody.innerHTML = '
-    // '
-
-}
 
 // Fetch five-day forecast
 async function fetchForecastData(city, API_KEY){
@@ -87,7 +58,23 @@ async function fetchForecastData(city, API_KEY){
 }
 
 // display Forecast
+function displayForecast(forecasts){
+    const forecastContainer = document.querySelector('.forecast')
+    forecastContainer.innerHTML = '';
 
+
+    forecasts.forEach(day => {
+        const date = new Date(day.dt * 1000)
+        const dayName = date.toLocaleDateString('en-US', {weekday : 'short'})
+
+        const temp = Math.round(day.main.temp)
+        const tempMin = Math.round(day.main.temp_min)
+        const tempMax = Math.round(day.main.temp_max)
+        
+        
+    });
+
+} 
 
 // Form Handling
 document.getElementById("weather-form").addEventListener("submit", async (e) =>{
