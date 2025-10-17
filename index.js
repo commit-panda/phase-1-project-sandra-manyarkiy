@@ -1,4 +1,5 @@
-import './config.js';
+import { API_KEY } from "./config.js"
+
 
 // const FSQ_API_KEY = 
 
