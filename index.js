@@ -144,7 +144,10 @@ async function fetchActivity(city, day, weather) {
         }
         const data = await res.json()
        
+        const activities = data.results.map(place => `<li>${place.name}</li>`).join('')
 
+        document.getElementById('activityModalLabel').textContent = `${day} Activites`
+        document.getElementById('activity-content').textContent.innerHTML = `<ul>`
 
     }
     catch(err){
