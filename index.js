@@ -70,8 +70,17 @@ function displayForecast(forecasts){
         const temp = Math.round(day.main.temp)
         const tempMin = Math.round(day.main.temp_min)
         const tempMax = Math.round(day.main.temp_max)
-        
-        
+
+        const forecastItem = document.createElement('li')
+        forecastItem.className = 'col-xs-4 col-sm-2 text-center'
+        forecastItem.innerHTML = `
+            <h3 class="h5">${dayName}</h3>
+            <p>
+                ${weatherIcon}<br />${tempMin}°/${tempMax}°
+            </p>
+        `
+
+        forecastContainer.appendChild(forecastItem)
     });
 
 } 
