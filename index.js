@@ -1,10 +1,13 @@
 import { API_KEY, FSQ_API_KEY } from "./config.js"
 
+const openWeatherUrl = 'https://api.openweathermap.org/data/2.5/weather'
+
+const fsqBaseUrl = 'https://api.foursquare.com/v3/places/search'
 
 // fetch current weather information from Open Weather API
-async function fetchWeatherData(city, API_KEY) {
+async function fetchWeatherData(openWeatherUrl, city, API_KEY) {
     try{
-        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
+        const res = await fetch(`${openWeatherUrl}?q=${city}&appid=${API_KEY}&units=metric`)
         const data = await res.json();
 
         document.getElementById('city-name').innerHTML = `${data.name}, ${data.sys.country}<br /><small id="today-date">${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</small>`;
@@ -66,6 +69,8 @@ function displayForecast(forecasts){
 
         const forecastItem = document.createElement('li')
         forecastItem.className = 'col-xs-4 col-sm-2 text-center'
+        forecastItem.dataset.day = dayName;
+        forecastItem.dataset.weather = weather;
         forecastItem.innerHTML = `
             <h3 class="h5">${dayName}</h3>
             <p>
@@ -75,6 +80,16 @@ function displayForecast(forecasts){
 
         forecastContainer.appendChild(forecastItem)
     });
+
+    document.querySelectorAll(".forecast-day").forEach(item => {
+        item.addEventListener("onClick", async () => {
+            const day = item.dataset.day
+            const weather = item.dataset.weather
+            const city = document.getElementById('city-input').value.trim() || 'Nairobi'
+
+            await fetchActivity(city, day, weather)
+        })
+    })
 
 } 
 
@@ -100,21 +115,36 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 // Activity
 
-const weatherActivityMap = {
-  Clear: ["park", "outdoor cafe", "scenic view"],
-  Clouds: ["art gallery", "coffee shop", "shopping mall"],
-  Rain: ["museum", "indoor gym", "cinema"],
-  Snow: ["indoor restaurant", "spa", "theater"],
-  Thunderstorm: ["museum", "arcade", "bookstore"],
-  Drizzle: ["coffee shop", "library", "indoor market"],
-  Mist: ["museum", "aquarium"],
-};
 
 // Fetch Activity Information from Foursquare API
 
-async function fetchActivity(FSQ_API_KEY) {
+const activityCategory = {
+Clear: ["park", "outdoor cafe", "scenic view"],
+Clouds: ["art gallery", "coffee shop", "shopping mall"],
+Rain: ["museum", "indoor gym", "cinema"],
+Snow: ["indoor restaurant", "spa", "theater"],
+Thunderstorm: ["museum", "arcade", "bookstore"],
+Drizzle: ["coffee shop", "library", "indoor market"],
+Mist: ["museum", "aquarium"],
+};
+
+async function fetchActivity(city, day, weather) {
     try{
-        const res = await fetch('https://api.foursquare.com/v3/places/search')
+        const res = await fetch(`${fsqBaseUrl}?near=${city}&query=${query}&limit=5`, { 
+            headers: {
+            Accept: 'application/json',
+            'X-Places-Api-Version': '1970-01-01',
+            Authorization: FSQ_API_KEY 
+        }}
+        )
+        .then(res => res.json())
+
+        if(!res.ok){
+            throw new Error(`Error fetching data: ${res.status}`)
+        }
+        const data = await res.json()
+       
+
 
     }
     catch(err){
