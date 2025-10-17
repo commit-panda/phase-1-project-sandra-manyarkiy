@@ -131,24 +131,25 @@ async function fetchActivity(city, day, weather) {
     const query = activityCategory[weather] || 'activities'
 
     try{
-        const res = await fetch(`${fsqBaseUrl}?near=${city}&query=${query}&limit=5`, { 
+        const res = await fetch(`${fsqBaseUrl}search?query=${query}&near=${city}&limit=5`, { 
             headers: {
             Accept: 'application/json',
-            Authorization: FSQ_API_KEY,
-            'X-Places-API-Version': '2023-09-01'
+            Authorization: FSQ_API_KEY
+
         }}
-        )
-        .then(res => res.json())
+    )
 
         if(!res.ok){
             throw new Error(`Error fetching data: ${res.status}`)
         }
+
         const data = await res.json()
+        console.log(data)
        
         const activities = data.results.map(place => `<li>${place.name}</li>`).join('')
 
-        document.getElementById('activityModalLabel').textContent = `${day} Activites`
-        document.getElementById('activity-content').textContent.innerHTML = `<ul>${activities}</ul>`
+        document.getElementById('activityModalLabel').textContent = `${day} Activities`
+        document.getElementById('activity-content').innerHTML = `<ul>${activities}</ul>`
 
         const modal = new bootstrap.Modal(document.getElementById('activityModal'))
         modal.show()
