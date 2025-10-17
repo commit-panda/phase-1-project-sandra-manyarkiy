@@ -47,14 +47,56 @@ async function fetchWeatherData(city = "Nairobi", API_KEY) {
     
 }
 
+function displayWeatherData(){
+    const todayDate = new Date();
+    const date = document.getElementById("today-date")
+    date.innerHTML = todayDate.toLocaleDateString();
+
+    console.log(todayDate)
+
+
+    const weatherBody = document.getElementById("current-weather-result")
+    // weatherBody.innerHTML = '
+    // '
+
+}
+
+// Fetch five-day forecast
+async function fetchForecastData(city, API_KEY){
+    try{
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
+        if(!res.ok){
+            throw new Error(`Forecast not found for:${error}`)
+        }
+
+        const data = await res.json()
+
+        const dailyForecast = data.list.filter(item => {
+            return item.dt_txt.includes('12:00:00')
+        })
+
+        const fiveDayForecast = dailyForecast.slice(0,5)
+
+        displayForecast(fiveDayForecast)
+
+        return data
+    }
+    catch(err){
+        console.error()
+    }
+}
+
+// display Forecast
+
+
 // Form Handling
 document.getElementById("weather-form").addEventListener("submit", async (e) =>{
     e.preventDefault()
 
-    const city = document.getElementById("city").value;
+    const city = document.getElementById("city-input").value.trim();
     const weatherText = await fetchWeatherData(city, API_KEY)
 
-    const resultDiv = document.getElementById("result")
+    const resultDiv = document.getElementById("current-weather-result")
     resultDiv.innerHTML = ""
     resultDiv.appendChild(weatherText) 
 
