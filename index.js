@@ -1,6 +1,6 @@
-const API_KEY ='582e4a592a05d366493424e26c60ffcb'
+import './config.js';
 
-const FSQ_API_KEY = 
+// const FSQ_API_KEY = 
 
 // fetch weather information from Open Weather API
 async function fetchWeatherData(city = "Nairobi", API_KEY) {
