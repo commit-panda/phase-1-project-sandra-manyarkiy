@@ -1,13 +1,10 @@
 import { API_KEY, FSQ_API_KEY } from "./config.js"
 
-const openWeatherUrl = 'https://api.openweathermap.org/data/2.5/weather'
-
-const fsqBaseUrl = 'https://api.foursquare.com/v3/places/search'
 
 // fetch current weather information from Open Weather API
-async function fetchWeatherData(openWeatherUrl, city, API_KEY) {
+async function fetchWeatherData(city, API_KEY) {
     try{
-        const res = await fetch(`${openWeatherUrl}?q=${city}&appid=${API_KEY}&units=metric`)
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
         const data = await res.json();
 
         document.getElementById('city-name').innerHTML = `${data.name}, ${data.sys.country}<br /><small id="today-date">${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</small>`;
@@ -60,7 +57,7 @@ function displayForecast(forecasts){
 
     forecasts.forEach(day => {
         const date = new Date(day.dt * 1000)
-        const dayName = date.toLocaleDateString('en-US', {weekday : 'long'})
+        const dayName = date.toLocaleDateString('en-US', {weekday : 'short'})
 
         const temp = Math.round(day.main.temp)
         const tempMin = Math.round(day.main.temp_min)
@@ -81,8 +78,8 @@ function displayForecast(forecasts){
         forecastContainer.appendChild(forecastItem)
     });
 
-    document.querySelectorAll(".forecast-day").forEach(item => {
-        item.addEventListener("onClick", async () => {
+    document.querySelectorAll(".forecast").forEach(item => {
+        item.addEventListener("click", async () => {
             const day = item.dataset.day
             const weather = item.dataset.weather
             const city = document.getElementById('city-input').value.trim() || 'Nairobi'
@@ -128,13 +125,17 @@ Drizzle: ["coffee shop", "library", "indoor market"],
 Mist: ["museum", "aquarium"],
 };
 
+const fsqBaseUrl = 'https://api.foursquare.com/v3/places/'
+
 async function fetchActivity(city, day, weather) {
+    const query = activityCategory[weather] || 'activities'
+
     try{
         const res = await fetch(`${fsqBaseUrl}?near=${city}&query=${query}&limit=5`, { 
             headers: {
             Accept: 'application/json',
-            'X-Places-Api-Version': '1970-01-01',
-            Authorization: FSQ_API_KEY 
+            Authorization: FSQ_API_KEY,
+            'X-Places-API-Version': '2023-09-01'
         }}
         )
         .then(res => res.json())
@@ -147,12 +148,16 @@ async function fetchActivity(city, day, weather) {
         const activities = data.results.map(place => `<li>${place.name}</li>`).join('')
 
         document.getElementById('activityModalLabel').textContent = `${day} Activites`
-        document.getElementById('activity-content').textContent.innerHTML = `<ul>`
+        document.getElementById('activity-content').textContent.innerHTML = `<ul>${activities}</ul>`
+
+        const modal = new bootstrap.Modal(document.getElementById('activityModal'))
+        modal.show()
+
+
 
     }
     catch(err){
-        console.error("ERROR:", err)
-        return "Could not fetch weather information. Please try check city name." 
+        console.error("Could not fetch activity:", err)
     }
     
 }

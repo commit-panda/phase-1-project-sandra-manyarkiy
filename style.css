@@ -1,17 +1,29 @@
-/* .container { max-width: 400px; margin: 0 auto; text-align: center; padding: 20px; background-color: rgba(255, 255, 255, 0.5); box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); margin-top: 105px; } */
-.main {
-  /* margin-top: 50px; */
+.container {
   max-width: 400px;
   margin: 0 auto;
   text-align: center;
-  background-color: rgba( 255, 255, 255, 0.5); /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  margin-top: 105px;
+}
+.main {
+  margin-top: 50px;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.5
+  ); /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
   margin-top: 105px;
 }
 
 .weather-panel {
   background-image: url("https://unsplash.it/600/400?image=1043&blur");
   background-size: cover;
-  border-radius: 20px;
   box-shadow: 25px 25px 40px 0px rgba(0, 0, 0, 0.33);
   color: #fff;
   overflow: hidden;
@@ -19,16 +31,16 @@
 }
 
 .weather-panel small {
-    color: inherit;
-    font-size: 50%;
-  }
+  color: inherit;
+  font-size: 50%;
+}
 
 .temperature span {
-    font-size: 2em;
+  font-size: 2em;
 }
 
 ul.forecast > li {
-    border-top: 1px solid #fff;
+  border-top: 1px solid #fff;
 }
 
 h1 {
