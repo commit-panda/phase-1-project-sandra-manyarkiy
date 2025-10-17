@@ -1,7 +1,5 @@
 import { API_KEY, FSQ_API_KEY } from "./config.js"
 
-fsqBaseUrl = 'https://api.foursquare.com/v3/places/'
-
 
 // fetch current weather information from Open Weather API
 async function fetchWeatherData(city, API_KEY) {
@@ -96,11 +94,24 @@ window.addEventListener('DOMContentLoaded', async () => {
 })
 
 
+
+// Activity
+
+const weatherActivityMap = {
+  Clear: ["park", "outdoor cafe", "scenic view"],
+  Clouds: ["art gallery", "coffee shop", "shopping mall"],
+  Rain: ["museum", "indoor gym", "cinema"],
+  Snow: ["indoor restaurant", "spa", "theater"],
+  Thunderstorm: ["museum", "arcade", "bookstore"],
+  Drizzle: ["coffee shop", "library", "indoor market"],
+  Mist: ["museum", "aquarium"],
+};
+
 // Fetch Activity Information from Foursquare API
 
 async function fetchActivity(FSQ_API_KEY) {
     try{
-        const res = await fetch()
+        const res = await fetch('https://api.foursquare.com/v3/places/search')
 
     }
     catch(err){
@@ -109,9 +120,3 @@ async function fetchActivity(FSQ_API_KEY) {
     }
     
 }
-
-document.getElementById("forecast-btn").addEventListener("onClick", async (e) => {
- e.preventDefault()
-
-
-})
