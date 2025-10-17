@@ -141,6 +141,14 @@ async function fetchActivity(city, day, weather) {
             throw new Error(`City not found`)
         }
 
+        const [lon, lat] = geocodeData.features[0].geometry.coordinates
+
+        const res = await fetch(`https://api.geoapify.com/v2/places?categories=${categories}&filter=circle:${lon},${lat},5000&limit=5&apiKey=${GEOAPIFY_API_KEY}`)
+
+        if(!res.ok){
+            throw new Error(`Error: ${res.status}`)
+        }
+
         const data = await res.json()
         console.log(data)
        
