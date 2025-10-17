@@ -1,4 +1,4 @@
-import { API_KEY, FSQ_API_KEY } from "./config.js"
+import { API_KEY, GEOAPIFY_API_KEY } from "./config.js"
 
 
 // fetch current weather information from Open Weather API
@@ -68,6 +68,7 @@ function displayForecast(forecasts){
         forecastItem.className = 'col-xs-4 col-sm-2 text-center'
         forecastItem.dataset.day = dayName;
         forecastItem.dataset.weather = weather;
+        forecastItem.style.cursor = 'pointer'
         forecastItem.innerHTML = `
             <h3 class="h5">${dayName}</h3>
             <p>
@@ -75,18 +76,17 @@ function displayForecast(forecasts){
             </p>
         `
 
+        forecastItem.addEventListener("click", async () => {
+            const city = document.getElementById('city-input').value.trim() || 'Nairobi'
+
+            await fetchActivity(city, dayName, weather)
+        })
+
         forecastContainer.appendChild(forecastItem)
     });
 
-    document.querySelectorAll(".forecast").forEach(item => {
-        item.addEventListener("click", async () => {
-            const day = item.dataset.day
-            const weather = item.dataset.weather
-            const city = document.getElementById('city-input').value.trim() || 'Nairobi'
-
-            await fetchActivity(city, day, weather)
-        })
-    })
+    
+        
 
 } 
 
@@ -113,34 +113,32 @@ window.addEventListener('DOMContentLoaded', async () => {
 // Activity
 
 
-// Fetch Activity Information from Foursquare API
+// Fetch Activity Information from Geoapify API
 
 const activityCategory = {
-Clear: ["park", "outdoor cafe", "scenic view"],
-Clouds: ["art gallery", "coffee shop", "shopping mall"],
-Rain: ["museum", "indoor gym", "cinema"],
-Snow: ["indoor restaurant", "spa", "theater"],
-Thunderstorm: ["museum", "arcade", "bookstore"],
-Drizzle: ["coffee shop", "library", "indoor market"],
-Mist: ["museum", "aquarium"],
+    Clear: "leisure.park,tourism.attraction,sport",
+    Clouds: "entertainment.museum,tourism.attraction,entertainment.culture",
+    Rain: "entertainment.cinema,entertainment.museum,catering.restaurant,commercial.shopping_mall",
+    Snow: "catering.restaurant,wellness.spa,entertainment.culture",
+    Thunderstorm: "entertainment.museum,entertainment.culture,commercial.shopping_mall",
+    Drizzle: "catering.cafe,commercial.bookstore,commercial.shopping_mall",
+    Mist: "entertainment.museum,tourism.aquarium,entertainment.culture"
 };
 
-const fsqBaseUrl = 'https://api.foursquare.com/v3/places/'
+
 
 async function fetchActivity(city, day, weather) {
-    const query = activityCategory[weather] || 'activities'
+    const categories = activityCategory[weather] || 'tourism.attraction'
 
     try{
-        const res = await fetch(`${fsqBaseUrl}search?query=${query}&near=${city}&limit=5`, { 
-            headers: {
-            Accept: 'application/json',
-            Authorization: FSQ_API_KEY
+       
+        const geocodeRes = await fetch()
+        const geocodeData = await geocodeRes.json(`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(city)}&limit=1&apiKey=${GEOAPIFY_API_KEY}`)
 
-        }}
-    )
 
-        if(!res.ok){
-            throw new Error(`Error fetching data: ${res.status}`)
+
+        if(!geocodeData.features || geocodeData.features.length === 0){
+            throw new Error(`City not found`)
         }
 
         const data = await res.json()
