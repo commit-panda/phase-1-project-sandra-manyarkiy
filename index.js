@@ -1,21 +1,13 @@
-import { API_KEY } from "./config.js"
+import { API_KEY, FSQ_API_KEY } from "./config.js"
 
+fsqBaseUrl = 'https://api.foursquare.com/v3/places/'
 
-// const FSQ_API_KEY = 
 
 // fetch current weather information from Open Weather API
 async function fetchWeatherData(city, API_KEY) {
     try{
         const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
         const data = await res.json();
-
-
-        // const cloud_name = data.weather[0].main
-        // const cloud_description = data.weather[0].description
-        // const temp = data.main.temp
-        // const feels_like = data.main.feels_like
-        // const humidity = data.main.humidity
-        // const wind_speed = data.wind.speed
 
         document.getElementById('city-name').innerHTML = `${data.name}, ${data.sys.country}<br /><small id="today-date">${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</small>`;
         document.getElementById('weather-condition').innerHTML = `${data.weather[0].description}`;
@@ -35,9 +27,9 @@ async function fetchWeatherData(city, API_KEY) {
 // Fetch five-day forecast
 async function fetchForecastData(city, API_KEY){
     try{
-        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`)
         if(!res.ok){
-            throw new Error(`Forecast not found for:${error}`)
+            throw new Error(`Forecast not found for:${city}`)
         }
 
         const data = await res.json()
@@ -52,8 +44,8 @@ async function fetchForecastData(city, API_KEY){
 
         return data
     }
-    catch(err){
-        console.error()
+     catch(err){
+        console.error("Forecast ERROR:", err)
     }
 }
 
@@ -76,7 +68,7 @@ function displayForecast(forecasts){
         forecastItem.innerHTML = `
             <h3 class="h5">${dayName}</h3>
             <p>
-                ${weatherIcon}<br />${tempMin}°/${tempMax}°
+                <br />${tempMin}°/${tempMax}°
             </p>
         `
 
@@ -86,19 +78,40 @@ function displayForecast(forecasts){
 } 
 
 // Form Handling
-document.getElementById("weather-form").addEventListener("submit", async (e) =>{
+document.getElementById("weather-form").addEventListener("submit", async (e) => {
     e.preventDefault()
 
-    const city = document.getElementById("city-input").value.trim();
-    const weatherText = await fetchWeatherData(city, API_KEY)
-
-    const resultDiv = document.getElementById("current-weather-result")
-    resultDiv.innerHTML = ""
-    resultDiv.appendChild(weatherText) 
-
-    const cityHeader = document.createElement("h2")
-    cityHeader.textContent = `Weather in ${city}`
-    resultDiv.prepend(cityHeader)
+    const city  = document.getElementById("city-input").value.trim()
+    await fetchWeatherData(city, API_KEY);
+    await fetchForecastData(city, API_KEY);
    
 })
 
+
+//fetch data 
+window.addEventListener('DOMContentLoaded', async () => {
+    const defaultCity = "Nairobi"
+    await fetchWeatherData(defaultCity, API_KEY)
+    await fetchForecastData(defaultCity, API_KEY)
+})
+
+
+// Fetch Activity Information from Foursquare API
+
+async function fetchActivity(FSQ_API_KEY) {
+    try{
+        const res = await fetch()
+
+    }
+    catch(err){
+        console.error("ERROR:", err)
+        return "Could not fetch weather information. Please try check city name." 
+    }
+    
+}
+
+document.getElementById("forecast-btn").addEventListener("onClick", async (e) => {
+ e.preventDefault()
+
+
+})
