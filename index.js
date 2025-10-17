@@ -1,4 +1,6 @@
-const API_KEY = '582e4a592a05d366493424e26c60ffcb'
+const API_KEY ='582e4a592a05d366493424e26c60ffcb'
+
+const FSQ_API_KEY = 
 
 // fetch weather information from Open Weather API
 async function fetchWeatherData(city = "Nairobi", API_KEY) {
@@ -54,5 +56,10 @@ document.getElementById("weather-form").addEventListener("submit", async (e) =>{
     const resultDiv = document.getElementById("result")
     resultDiv.innerHTML = ""
     resultDiv.appendChild(weatherText) 
+
+    const cityHeader = document.createElement("h2")
+    cityHeader.textContent = `Weather in ${city}`
+    resultDiv.prepend(cityHeader)
    
 })
+
