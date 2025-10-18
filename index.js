@@ -72,7 +72,8 @@ function displayForecast(forecasts){
         forecastItem.innerHTML = `
             <h3 class="h5">${dayName}</h3>
             <p>
-                <br />${tempMin}°/${tempMax}°
+                <!<br />${tempMin}°/${tempMax}°
+                <br />${temp}°
             </p>
         `
 
