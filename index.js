@@ -1,3 +1,4 @@
+import bootstrap from "bootstrap";
 import { API_KEY, GEOAPIFY_API_KEY } from "./config.js"
 
 
@@ -150,15 +151,30 @@ async function fetchActivity(city, day, weather) {
         }
 
         const data = await res.json()
-        console.log(data)
+      
        
-        const activities = data.results.map(place => `<li>${place.name}</li>`).join('')
-
-        document.getElementById('activityModalLabel').textContent = `${day} Activities`
-        document.getElementById('activity-content').innerHTML = `<ul>${activities}</ul>`
+        if(!data.features || data.features.length === 0){
+            document.getElementById('activityModalLabel').textContent = `${day} Activities`
+            document.getElementById('activity-content').innerHTML = `<p>No activities found for ${weather} weather in ${city}. Try a different city!</p>`
+        }
+        else {
+            const activities = data.features.map(place => {
+                    const name = place.properties.name || place.properties.address_line1 || 'Unnamed Place';
+                    const category = place.properties.categories?.[0] || '';
+                    return `<li><strong>${name}</strong>${category ? ` - ${category}` : ''}</li>`;
+                })
+                .join('');
+            
+            document.getElementById('activityModalLabel').textContent = `${day} Activities in ${city}`;
+            document.getElementById('activity-content').innerHTML = `
+                <p class="text-muted mb-3">Recommended activities for ${weather} weather:</p>
+                <ul>${activities}</ul>
+            `;
+        }
 
         const modal = new bootstrap.Modal(document.getElementById('activityModal'))
         modal.show()
+        
 
 
 
