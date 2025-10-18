@@ -1,4 +1,3 @@
-import bootstrap from "bootstrap";
 import { API_KEY, GEOAPIFY_API_KEY } from "./config.js"
 
 
@@ -133,8 +132,8 @@ async function fetchActivity(city, day, weather) {
 
     try{
        
-        const geocodeRes = await fetch()
-        const geocodeData = await geocodeRes.json(`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(city)}&limit=1&apiKey=${GEOAPIFY_API_KEY}`)
+        const geocodeRes = await fetch(`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(city)}&limit=1&apiKey=${GEOAPIFY_API_KEY}`)
+        const geocodeData = await geocodeRes.json()
 
 
 
@@ -174,13 +173,17 @@ async function fetchActivity(city, day, weather) {
 
         const modal = new bootstrap.Modal(document.getElementById('activityModal'))
         modal.show()
-        
+
 
 
 
     }
     catch(err){
-        console.error("Could not fetch activity:", err)
+        console.error("Could not fetch activity:", err);
+        document.getElementById('activityModalLabel').textContent = `Error`;
+        document.getElementById('activity-content').innerHTML = `<p>Could not load activities. Please try again later.</p>`;
+        const modal = new bootstrap.Modal(document.getElementById('activityModal'));
+        modal.show();
     }
     
 }
