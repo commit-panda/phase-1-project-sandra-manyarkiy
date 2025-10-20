@@ -28,6 +28,39 @@ body {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 }
 
+.search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search input[type="text"] {
+  width: 65%;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  outline: none;
+}
+
+.search button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #ffffff;
+  color: #007bff;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.search button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
 .weather-container h1 {
   font-size: 32px;
   margin-bottom: 20px;
