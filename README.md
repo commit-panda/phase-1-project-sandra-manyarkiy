@@ -1,4 +1,4 @@
-# WeatherMate
+# WeatherMate⛅️
 
 **WeatherMate** is a weather forecasting application that provides the current weather conditions and the forecast for the next five days. It also suggests activities based on the weather conditions for a selected day.
 
