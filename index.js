@@ -3,14 +3,21 @@ import { API_KEY, GEOAPIFY_API_KEY } from "./config.js"
 
 // fetch current weather information from Open Weather API
 async function fetchWeatherData(city, API_KEY) {
+    showSpinner();
     try{
         const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
         const data = await res.json();
 
         document.getElementById('city-name').innerHTML = `${data.name}, ${data.sys.country}<br /><small id="today-date">${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</small>`;
-        document.getElementById('weather-condition').innerHTML = `${data.weather[0].main}`;
         document.getElementById('current-temp').textContent = `${Math.round(data.main.temp)}°`;
         document.getElementById('temp-range').textContent = `${Math.round(data.main.temp_min)}° / ${Math.round(data.main.temp_max)}°`;
+        document.getElementById('weather-condition').innerHTML = `${data.weather[0].main}`;
+        const condition = data.weather[0].main;
+        const iconClass = getWeatherIcon(condition);
+        document.getElementById('weather-condition').innerHTML = `
+        <i class="wi ${iconClass}"></i><br>${condition}
+        `;
+
         // const humidity = Math.round(day.main.humidity)
         // const windSpeed = Math.round(day.wind.speed)
         
@@ -46,6 +53,8 @@ async function fetchForecastData(city, API_KEY){
     }
      catch(err){
         console.error("Forecast ERROR:", err)
+    } finally{
+        hideSpinner();
     }
 }
 
@@ -187,4 +196,34 @@ async function fetchActivity(city, day, weather) {
         modal.show();
     }
     
+}
+
+function getWeatherIcon(condition) {
+  const iconMap = {
+    Clear: "wi-day-sunny",
+    Clouds: "wi-cloudy",
+    Rain: "wi-rain",
+    Drizzle: "wi-sprinkle",
+    Thunderstorm: "wi-thunderstorm",
+    Snow: "wi-snow",
+    Mist: "wi-fog",
+    Smoke: "wi-smoke",
+    Haze: "wi-day-haze",
+    Dust: "wi-dust",
+    Fog: "wi-fog",
+    Sand: "wi-sandstorm",
+    Ash: "wi-volcano",
+    Squall: "wi-strong-wind",
+    Tornado: "wi-tornado",
+  };
+
+  return iconMap[condition] || "wi-na"; // default if not found
+}
+
+function showSpinner() {
+  document.getElementById("loading-spinner").classList.remove("d-none");
+}
+
+function hideSpinner() {
+  document.getElementById("loading-spinner").classList.add("d-none");
 }
