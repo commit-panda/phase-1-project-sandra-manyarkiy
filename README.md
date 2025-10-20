@@ -28,34 +28,36 @@ Follow these steps to run the project locally:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/weatherapp.git
-cd weatherapp
+git clone https://github.com/commit-panda/phase-1-project-sandra-manyarkiy.git
+cd phase-1-project-sandra-manyarkiy
 ```
 
 
 Create a config.js file in the root of your project and add the following:
 
 ```bash
-const config = {
-  OPENWEATHER_API_KEY: "your_openweather_api_key",
-  GEOAPIFY_API_KEY: "your_geoapify_api_key",
-};
-
-export default config;
+export const API_KEY = 'your_openweather_api_key'
+export const GEOAPIFY_API_KEY = 'your_geoapify_api_key'
 ```
 
 
 Replace "your_openweather_api_key" and "your_geoapify_api_key" with the respective keys from the APIs.
 
+In the index.js file, import the API keys by typing in the following at the top of the file
+
+```js
+import { API_KEY, GEOAPIFY_API_KEY } from "./config.js"
+```
+
 ### Live Server Setup:
 
 Install the Live Server extension in Visual Studio Code (VS Code) for real-time preview.
 
-Open VS Code and go to the Extensions view by clicking on the Extensions icon in the Activity Bar on the side of the window or press Ctrl+Shift+X.
+1. Open VS Code and go to the Extensions view by clicking on the Extensions icon in the Activity Bar on the side of the window or press Ctrl+Shift+X.
 
-Search for Live Server and click Install on the first result.
+2. Search for Live Server and click Install on the first result.
 
-Once installed, right-click on the index.html file and select Open with Live Server.
+3. Once installed, right-click on the index.html file and select Open with Live Server.
 
 This will launch the app at:
 
@@ -95,7 +97,7 @@ https://api.geoapify.com/v1/geocode/search
 
 Note: Make sure to add your API key to config.js as described in the installation steps.
 
-## Activity Suggestions
+## 🏝️ Activity Suggestions
 
 This app uses a simple set of weather conditions to suggest activities. Based on the temperature, wind speed, and precipitation, users will receive personalized suggestions, such as:
 
